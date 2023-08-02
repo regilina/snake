@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+.game-container {
+  display: inline-block;
+  border: 2px solid #ccc;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  grid-template-rows: repeat(10, 20px);
+  gap: 2px;
+  border: 2px solid #999;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.game-board .cell {
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+}
+
+.snake, .apple {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.snake::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: green;
+}
+
+.apple::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: red;
+}
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.restart-button {
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.score, .best-score {
+  font-size: 16px;
+}
