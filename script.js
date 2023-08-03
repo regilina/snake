@@ -4,19 +4,19 @@ class Cell {
     this._y = y
   }
 
-  getX() {
+  getX () {
     return this._x
   }
 
-  getY() {
+  getY () {
     return this._y
   }
 
-  setX(x) {
+  setX (x) {
     this._x = x
   }
 
-  setY(y) {
+  setY (y) {
     this._y = y
   }
 }
@@ -71,13 +71,12 @@ class Snake {
   }
 
   getDirection () {
-    return  this._direction
+    return this._direction
   }
 
   setDirection (direction) {
     this._direction = direction
   }
-
 
   getBody () {
     return this._body
@@ -124,15 +123,13 @@ class Apple {
     this._y = Math.floor(Math.random() * 10)
   }
 
-  getX() {
+  getX () {
     return this._x
   }
 
-  getY() {
+  getY () {
     return this._y
   }
-
-
 }
 
 class Game {
@@ -151,7 +148,7 @@ class Game {
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
     this.updateScore(0)
-    this.displayBestScore() 
+    this.displayBestScore()
     this.addControls()
     this.startGame()
   }
@@ -160,13 +157,13 @@ class Game {
     document.addEventListener('keydown', (event) => {
       const key = event.key
       if (key === 'ArrowUp' && this._snake.getDirection() !== 'down') {
-        this._snake.setDirection('up') 
+        this._snake.setDirection('up')
       } else if (key === 'ArrowDown' && this._snake.getDirection() !== 'up') {
-        this._snake.setDirection('down') 
+        this._snake.setDirection('down')
       } else if (key === 'ArrowLeft' && this._snake.getDirection() !== 'right') {
-        this._snake.setDirection('left') 
+        this._snake.setDirection('left')
       } else if (key === 'ArrowRight' && this._snake.getDirection() !== 'left') {
-        this._snake.setDirection('right') 
+        this._snake.setDirection('right')
       }
     })
 
@@ -181,13 +178,13 @@ class Game {
     document.getElementById('score').textContent = this._score
     if (this._score > this._bestScore) {
       this._bestScore = this._score
-      document.getElementById('best-score').textContent = this._bestScore;
+      document.getElementById('best-score').textContent = this._bestScore
       localStorage.setItem('bestScore', this._bestScore)
     }
   }
 
-  displayBestScore() {
-    document.getElementById('best-score').textContent = this._bestScore;
+  displayBestScore () {
+    document.getElementById('best-score').textContent = this._bestScore
   }
 
   startGame () {
@@ -205,57 +202,57 @@ class Game {
   gameLoop = (timestamp) => {
     if (!this._isGameOver) {
       if (timestamp - this._lastMoveTime >= this._moveDelay) {
-        this._lastMoveTime = timestamp;
-        this.moveSnake(this._snake);
+        this._lastMoveTime = timestamp
+        this.moveSnake(this._snake)
       }
     }
 
-    this._board.clearBoard();
-    this._board.renderSnake(this._snake);
-    this._board.renderApple(this._apple);
+    this._board.clearBoard()
+    this._board.renderSnake(this._snake)
+    this._board.renderApple(this._apple)
 
-    requestAnimationFrame(this.gameLoop);
+    requestAnimationFrame(this.gameLoop)
   }
 
   handleKeyDown = (event) => {
     const key = event.key
     if (key === 'ArrowUp' && this._snake.getDirection() !== 'down') {
-      this._snake.setDirection('up') 
+      this._snake.setDirection('up')
     } else if (key === 'ArrowDown' && this._snake.getDirection() !== 'up') {
-      this._snake.setDirection('down') 
+      this._snake.setDirection('down')
     } else if (key === 'ArrowLeft' && this._snake.getDirection() !== 'right') {
-      this._snake.setDirection('left') 
+      this._snake.setDirection('left')
     } else if (key === 'ArrowRight' && this._snake.getDirection() !== 'left') {
-      this._snake.setDirection('right') 
+      this._snake.setDirection('right')
     }
   }
 
-  moveSnake(snake) {
-    const head = snake.getNextHead();
-  
-    if (head.getX() < 0) head.setX(9);
-    if (head.getX() > 9) head.setX(0);
-    if (head.getY() < 0) head.setY(9);
-    if (head.getY() > 9) head.setY(0);
-  
+  moveSnake (snake) {
+    const head = snake.getNextHead()
+
+    if (head.getX() < 0) head.setX(9)
+    if (head.getX() > 9) head.setX(0)
+    if (head.getY() < 0) head.setY(9)
+    if (head.getY() > 9) head.setY(0)
+
     for (let i = 1; i < snake.getBody().length; i++) {
       if (head.getX() === snake.getBody()[i].getX() && head.getY() === snake.getBody()[i].getY()) {
-        this.gameOver();
-        return;
+        this.gameOver()
+        return
       }
     }
-  
+
     if (head.getX() === this._apple.getX() && head.getY() === this._apple.getY()) {
-      snake.grow();
-      this.updateScore(this._score + 1);
-      this._apple.spawn();
+      snake.grow()
+      this.updateScore(this._score + 1)
+      this._apple.spawn()
     } else {
-      snake.move();
+      snake.move()
     }
-  
-    this._board.clearBoard();
-    this._board.renderSnake(snake);
-    this._board.renderApple(this._apple);
+
+    this._board.clearBoard()
+    this._board.renderSnake(snake)
+    this._board.renderApple(this._apple)
   }
 
   gameOver () {
