@@ -141,7 +141,6 @@ class Game {
     this._bestScore = localStorage.getItem('bestScore') || 0
     this._interval = null
     this._isGameOver = false
-    this.init()
   }
 
   init () {
@@ -178,7 +177,7 @@ class Game {
     document.getElementById('score').textContent = this._score
     if (this._score > this._bestScore) {
       this._bestScore = this._score
-      document.getElementById('best-score').textContent = this._bestScore
+      this.displayBestScore()
       localStorage.setItem('bestScore', this._bestScore)
     }
   }
@@ -194,7 +193,6 @@ class Game {
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
     this.updateScore(0)
-    this.addControls()
 
     requestAnimationFrame(this.gameLoop)
   }
@@ -257,9 +255,6 @@ class Game {
 
   gameOver () {
     this._isGameOver = true
-    clearInterval(this._interval)
-    const restartButton = document.getElementById('restart-button')
-    restartButton.style.display = 'block'
   }
 
   restartGame () {
@@ -270,8 +265,6 @@ class Game {
     this._board.clearBoard()
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
-    const restartButton = document.getElementById('restart-button')
-    restartButton.style.display = 'none'
     this.startGame()
   }
 }
