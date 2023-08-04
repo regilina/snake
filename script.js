@@ -114,13 +114,19 @@ class Snake {
 }
 
 class Apple {
-  constructor () {
-    this.spawn()
+  constructor (snake) {
+    this.spawn(snake)
   }
 
-  spawn () {
+  spawn (snake) {
     this._x = Math.floor(Math.random() * 10)
     this._y = Math.floor(Math.random() * 10)
+
+    snake.getBody().forEach(cell => {
+      if (this._x === cell.getX() && this._y === cell.getY()) {
+        this.spawn(snake)
+      }
+    })
   }
 
   getX () {
@@ -243,7 +249,7 @@ class Game {
     if (head.getX() === this._apple.getX() && head.getY() === this._apple.getY()) {
       snake.grow()
       this.updateScore(this._score + 1)
-      this._apple.spawn()
+      this._apple.spawn(snake)
     } else {
       snake.move()
     }
@@ -259,7 +265,7 @@ class Game {
 
   restartGame () {
     this._snake = new Snake()
-    this._apple.spawn()
+    this._apple.spawn(this._snake)
     this._isGameOver = false
     this.updateScore(0)
     this._board.clearBoard()
@@ -272,7 +278,7 @@ class Game {
 function initGame () {
   const board = new Board()
   const snake = new Snake()
-  const apple = new Apple()
+  const apple = new Apple(snake)
   const game = new Game(board, snake, apple)
 
   game.init()
