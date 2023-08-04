@@ -155,7 +155,6 @@ class Game {
     this.updateScore(0)
     this.displayBestScore()
     this.addControls()
-    this.startGame()
   }
 
   addControls () {
@@ -175,6 +174,11 @@ class Game {
     const restartButton = document.getElementById('restart-button')
     restartButton.addEventListener('click', () => {
       this.restartGame()
+    })
+
+    const board = document.getElementById('board')
+    board.addEventListener('click', () => {
+      this.startGame()
     })
   }
 
@@ -266,11 +270,7 @@ class Game {
   restartGame () {
     this._snake = new Snake()
     this._apple.spawn(this._snake)
-    this._isGameOver = false
-    this.updateScore(0)
     this._board.clearBoard()
-    this._board.renderSnake(this._snake)
-    this._board.renderApple(this._apple)
     this.startGame()
   }
 }
