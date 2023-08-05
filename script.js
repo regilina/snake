@@ -136,7 +136,7 @@ class Game {
 
     const restartButton = document.getElementById('restart-button')
     restartButton.addEventListener('click', () => {
-      this.restartGame()
+      this._restartGame()
     })
 
     const board = document.getElementById('board')
