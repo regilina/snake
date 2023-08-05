@@ -1,23 +1,7 @@
 class Cell {
   constructor (x, y) {
-    this._x = x
-    this._y = y
-  }
-
-  getX () {
-    return this._x
-  }
-
-  getY () {
-    return this._y
-  }
-
-  setX (x) {
-    this._x = x
-  }
-
-  setY (y) {
-    this._y = y
+    this.x = x
+    this.y = y
   }
 }
 
@@ -43,8 +27,8 @@ class Board {
 
   renderSnake (snake) {
     this.clearBoard()
-    snake.getBody().forEach((segment) => {
-      const cellElement = document.getElementById(`cell-${segment.getX()}-${segment.getY()}`)
+    snake.body.forEach((segment) => {
+      const cellElement = document.getElementById(`cell-${segment.x}-${segment.y}`)
       if (cellElement) {
         cellElement.classList.add('snake')
       }
@@ -52,13 +36,13 @@ class Board {
   }
 
   renderApple (apple) {
-    const cellElement = document.getElementById(`cell-${apple.getX()}-${apple.getY()}`)
+    const cellElement = document.getElementById(`cell-${apple.x}-${apple.y}`)
     cellElement.classList.add('apple')
   }
 
   clearBoard () {
     this._cells.forEach((cell) => {
-      const cellElement = document.getElementById(`cell-${cell.getX()}-${cell.getY()}`)
+      const cellElement = document.getElementById(`cell-${cell.x}-${cell.y}`)
       cellElement.className = 'cell'
     })
   }
@@ -66,50 +50,38 @@ class Board {
 
 class Snake {
   constructor () {
-    this._body = [new Cell(5, 5), new Cell(4, 5)]
-    this._direction = 'right'
-  }
-
-  getDirection () {
-    return this._direction
-  }
-
-  setDirection (direction) {
-    this._direction = direction
-  }
-
-  getBody () {
-    return this._body
+    this.body = [new Cell(5, 5), new Cell(4, 5)]
+    this.direction = 'right'
   }
 
   move () {
     const head = this.getNextHead()
-    this._body.unshift(head)
-    this._body.pop()
+    this.body.unshift(head)
+    this.body.pop()
   }
 
   getNextHead () {
-    const head = this._body[0]
-    let newHeadX = head.getX()
-    let newHeadY = head.getY()
+    const head = this.body[0]
+    let newHeadX = head.x
+    let newHeadY = head.y
 
-    if (this._direction === 'up') {
-      newHeadY = (head.getY() - 1 + 10) % 10
-    } else if (this._direction === 'down') {
-      newHeadY = (head.getY() + 1) % 10
-    } else if (this._direction === 'left') {
-      newHeadX = (head.getX() - 1 + 10) % 10
-    } else if (this._direction === 'right') {
-      newHeadX = (head.getX() + 1) % 10
+    if (this.direction === 'up') {
+      newHeadY = (head.y - 1 + 10) % 10
+    } else if (this.direction === 'down') {
+      newHeadY = (head.y + 1) % 10
+    } else if (this.direction === 'left') {
+      newHeadX = (head.x - 1 + 10) % 10
+    } else if (this.direction === 'right') {
+      newHeadX = (head.x + 1) % 10
     }
 
     return new Cell(newHeadX, newHeadY)
   }
 
   grow () {
-    const tail = this._body[this._body.length - 1]
-    const newTail = new Cell(tail.getX(), tail.getY())
-    this._body.push(newTail)
+    const tail = this.body[this.body.length - 1]
+    const newTail = new Cell(tail.x, tail.y)
+    this.body.push(newTail)
   }
 }
 
@@ -119,22 +91,14 @@ class Apple {
   }
 
   spawn (snake) {
-    this._x = Math.floor(Math.random() * 10)
-    this._y = Math.floor(Math.random() * 10)
+    this.x = Math.floor(Math.random() * 10)
+    this.y = Math.floor(Math.random() * 10)
 
-    snake.getBody().forEach(cell => {
-      if (this._x === cell.getX() && this._y === cell.getY()) {
+    snake.body.forEach(cell => {
+      if (this.x === cell.x && this.y === cell.y) {
         this.spawn(snake)
       }
     })
-  }
-
-  getX () {
-    return this._x
-  }
-
-  getY () {
-    return this._y
   }
 }
 
@@ -152,22 +116,21 @@ class Game {
   init () {
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
-    this.updateScore(0)
-    this.displayBestScore()
-    this.addControls()
+    this._displayBestScore()
+    this._addControls()
   }
 
-  addControls () {
+  _addControls () {
     document.addEventListener('keydown', (event) => {
       const key = event.key
-      if (key === 'ArrowUp' && this._snake.getDirection() !== 'down') {
-        this._snake.setDirection('up')
-      } else if (key === 'ArrowDown' && this._snake.getDirection() !== 'up') {
-        this._snake.setDirection('down')
-      } else if (key === 'ArrowLeft' && this._snake.getDirection() !== 'right') {
-        this._snake.setDirection('left')
-      } else if (key === 'ArrowRight' && this._snake.getDirection() !== 'left') {
-        this._snake.setDirection('right')
+      if (key === 'ArrowUp' && this._snake.direction !== 'down') {
+        this._snake.direction = 'up'
+      } else if (key === 'ArrowDown' && this._snake.direction !== 'up') {
+        this._snake.direction = 'down'
+      } else if (key === 'ArrowLeft' && this._snake.direction !== 'right') {
+        this._snake.direction = 'left'
+      } else if (key === 'ArrowRight' && this._snake.direction !== 'left') {
+        this._snake.direction = 'right'
       }
     })
 
@@ -178,40 +141,38 @@ class Game {
 
     const board = document.getElementById('board')
     board.addEventListener('click', () => {
-      this.startGame()
+      this._startGame()
     })
   }
 
-  updateScore (score) {
+  _updateScore (score) {
     this._score = score
     document.getElementById('score').textContent = this._score
     if (this._score > this._bestScore) {
       this._bestScore = this._score
-      this.displayBestScore()
+      this._displayBestScore()
       localStorage.setItem('bestScore', this._bestScore)
     }
   }
 
-  displayBestScore () {
+  _displayBestScore () {
     document.getElementById('best-score').textContent = this._bestScore
   }
 
-  startGame () {
+  _startGame () {
     this._isGameOver = false
     this._lastMoveTime = 0
     this._moveDelay = 100
-    this._board.renderSnake(this._snake)
-    this._board.renderApple(this._apple)
-    this.updateScore(0)
+    this._updateScore(0)
 
-    requestAnimationFrame(this.gameLoop)
+    requestAnimationFrame(this._gameLoop)
   }
 
-  gameLoop = (timestamp) => {
+  _gameLoop = (timestamp) => {
     if (!this._isGameOver) {
       if (timestamp - this._lastMoveTime >= this._moveDelay) {
         this._lastMoveTime = timestamp
-        this.moveSnake(this._snake)
+        this._moveSnake(this._snake)
       }
     }
 
@@ -219,40 +180,27 @@ class Game {
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
 
-    requestAnimationFrame(this.gameLoop)
+    requestAnimationFrame(this._gameLoop)
   }
 
-  handleKeyDown = (event) => {
-    const key = event.key
-    if (key === 'ArrowUp' && this._snake.getDirection() !== 'down') {
-      this._snake.setDirection('up')
-    } else if (key === 'ArrowDown' && this._snake.getDirection() !== 'up') {
-      this._snake.setDirection('down')
-    } else if (key === 'ArrowLeft' && this._snake.getDirection() !== 'right') {
-      this._snake.setDirection('left')
-    } else if (key === 'ArrowRight' && this._snake.getDirection() !== 'left') {
-      this._snake.setDirection('right')
-    }
-  }
-
-  moveSnake (snake) {
+  _moveSnake (snake) {
     const head = snake.getNextHead()
 
-    if (head.getX() < 0) head.setX(9)
-    if (head.getX() > 9) head.setX(0)
-    if (head.getY() < 0) head.setY(9)
-    if (head.getY() > 9) head.setY(0)
+    if (head.x < 0) head.x = 9
+    if (head.x > 9) head.x = 0
+    if (head.y < 0) head.y = 9
+    if (head.y > 9) head.y = 0
 
-    for (let i = 1; i < snake.getBody().length; i++) {
-      if (head.getX() === snake.getBody()[i].getX() && head.getY() === snake.getBody()[i].getY()) {
-        this.gameOver()
+    for (let i = 1; i < snake.body.length; i++) {
+      if (head.x === snake.body[i].x && head.y === snake.body[i].y) {
+        this._gameOver()
         return
       }
     }
 
-    if (head.getX() === this._apple.getX() && head.getY() === this._apple.getY()) {
+    if (head.x === this._apple.x && head.y === this._apple.y) {
       snake.grow()
-      this.updateScore(this._score + 1)
+      this._updateScore(this._score + 1)
       this._apple.spawn(snake)
     } else {
       snake.move()
@@ -263,15 +211,15 @@ class Game {
     this._board.renderApple(this._apple)
   }
 
-  gameOver () {
+  _gameOver () {
     this._isGameOver = true
   }
 
-  restartGame () {
+  _restartGame () {
     this._snake = new Snake()
     this._apple.spawn(this._snake)
     this._board.clearBoard()
-    this.startGame()
+    this._startGame()
   }
 }
 
