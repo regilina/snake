@@ -202,6 +202,7 @@ class Game {
       snake.grow()
       this._updateScore(this._score + 1)
       this._apple.spawn(snake)
+      this._moveDelay -= 10
     } else {
       snake.move()
     }
