@@ -109,7 +109,6 @@ class Game {
     this._apple = apple
     this._score = 0
     this._bestScore = localStorage.getItem('bestScore') || 0
-    this._interval = null
     this._isGameOver = false
   }
 
