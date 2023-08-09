@@ -161,7 +161,7 @@ class Game {
   _startGame () {
     this._isGameOver = false
     this._lastMoveTime = 0
-    this._moveDelay = 100
+    this._moveDelay = 500
     this._updateScore(0)
 
     requestAnimationFrame(this._gameLoop)
@@ -201,7 +201,7 @@ class Game {
       snake.grow()
       this._updateScore(this._score + 1)
       this._apple.spawn(snake)
-      this._moveDelay -= 10
+      this._moveDelay -= 30
     } else {
       snake.move()
     }
