@@ -66,13 +66,13 @@ class Snake {
     let newHeadY = head.y
 
     if (this.direction === 'up') {
-      newHeadY = (head.y - 1 + 10) % 10
+      newHeadY = (head.y - 1)
     } else if (this.direction === 'down') {
-      newHeadY = (head.y + 1) % 10
+      newHeadY = (head.y + 1)
     } else if (this.direction === 'left') {
-      newHeadX = (head.x - 1 + 10) % 10
+      newHeadX = (head.x - 1)
     } else if (this.direction === 'right') {
-      newHeadX = (head.x + 1) % 10
+      newHeadX = (head.x + 1)
     }
 
     return new Cell(newHeadX, newHeadY)
@@ -185,10 +185,10 @@ class Game {
   _moveSnake (snake) {
     const head = snake.getNextHead()
 
-    if (head.x < 0) head.x = 9
-    if (head.x > 9) head.x = 0
-    if (head.y < 0) head.y = 9
-    if (head.y > 9) head.y = 0
+    if (head.x < 0 || head.x > 9 || head.y < 0 || head.y > 9) {
+      this._gameOver()
+      return
+    }
 
     for (let i = 1; i < snake.body.length; i++) {
       if (head.x === snake.body[i].x && head.y === snake.body[i].y) {
