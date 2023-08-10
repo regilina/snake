@@ -227,11 +227,11 @@ class Game {
 }
 
 function initGame () {
-  const boardWidth = parseInt(prompt('Введите ширину поля (от 10 до 20):'))
-  const boardHeight = parseInt(prompt('Введите высоту поля (от 10 до 20):'))
+  const boardWidth = parseInt(prompt('Введите ширину поля (от 10 до 80):'))
+  const boardHeight = parseInt(prompt('Введите высоту поля (от 10 до 80):'))
 
-  if (isNaN(boardWidth) || boardWidth < 10 || boardWidth > 20 || isNaN(boardHeight) || boardHeight < 10 || boardHeight > 20) {
-    alert('Некорректный размер поля. Пожалуйста, введите число от 10 до 20.')
+  if (isNaN(boardWidth) || boardWidth < 10 || boardWidth > 80 || isNaN(boardHeight) || boardHeight < 10 || boardHeight > 80) {
+    alert('Некорректный размер поля. Пожалуйста, введите число от 10 до 80.')
     return
   }
 
