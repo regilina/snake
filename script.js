@@ -6,16 +6,17 @@ class Cell {
 }
 
 class Board {
-  constructor (size) {
+  constructor (width, height) {
     this.cells = []
-    this.size = size
+    this.width = width
+    this.height = height
     this.createBoard()
   }
 
   createBoard () {
     const boardElement = document.getElementById('board')
-    for (let row = 0; row < this.size; row++) {
-      for (let col = 0; col < this.size; col++) {
+    for (let row = 0; row < this.height; row++) {
+      for (let col = 0; col < this.width; col++) {
         const cell = new Cell(col, row)
         this.cells.push(cell)
         const cellElement = document.createElement('div')
@@ -87,17 +88,17 @@ class Snake {
 }
 
 class Apple {
-  constructor (snake, size) {
-    this.spawn(snake, size)
+  constructor (snake, boardWidth, boardHeight) {
+    this.spawn(snake, boardWidth, boardHeight)
   }
 
-  spawn (snake, size) {
-    this.x = Math.floor(Math.random() * size)
-    this.y = Math.floor(Math.random() * size)
+  spawn (snake, boardWidth, boardHeight) {
+    this.x = Math.floor(Math.random() * boardWidth)
+    this.y = Math.floor(Math.random() * boardHeight)
 
     snake.body.forEach(cell => {
       if (this.x === cell.x && this.y === cell.y) {
-        this.spawn(snake, size)
+        this.spawn(snake, boardWidth, boardHeight)
       }
     })
   }
@@ -186,7 +187,7 @@ class Game {
   _moveSnake (snake) {
     const head = snake.getNextHead()
 
-    if (head.x < 0 || head.x >= this._board.size || head.y < 0 || head.y >= this._board.size) {
+    if (head.x < 0 || head.x >= this._board.width || head.y < 0 || head.y >= this._board.height) {
       this._gameOver()
       return
     }
@@ -202,7 +203,7 @@ class Game {
       snake.grow()
       snake.move()
       this._updateScore(this._score + 1)
-      this._apple.spawn(snake, this._board.size)
+      this._apple.spawn(snake, this._board.width, this._board.height)
       this._moveDelay -= 20
     } else {
       snake.move()
@@ -219,28 +220,29 @@ class Game {
 
   _restartGame () {
     this._snake = new Snake()
-    this._apple = new Apple(this._snake, this._board.size)
+    this._apple = new Apple(this._snake, this._board.width, this._board.height)
     this._board.clearBoard()
     this._startGame()
   }
 }
 
 function initGame () {
-  const size = parseInt(prompt('Введите размер поля (от 2 до 20):'))
+  const boardWidth = parseInt(prompt('Введите ширину поля (от 10 до 20):'))
+  const boardHeight = parseInt(prompt('Введите высоту поля (от 10 до 20):'))
 
-  if (isNaN(size) || size < 2 || size > 20) {
-    alert('Некорректный размер поля. Пожалуйста, введите число от 2 до 20.')
+  if (isNaN(boardWidth) || boardWidth < 10 || boardWidth > 20 || isNaN(boardHeight) || boardHeight < 10 || boardHeight > 20) {
+    alert('Некорректный размер поля. Пожалуйста, введите число от 10 до 20.')
     return
   }
 
-  const board = new Board(size)
+  const board = new Board(boardWidth, boardHeight)
   const snake = new Snake()
-  const apple = new Apple(snake, size)
+  const apple = new Apple(snake, boardWidth, boardHeight)
   const game = new Game(board, snake, apple)
 
   // Добавьте передачу размеров поля в CSS
-  document.documentElement.style.setProperty('--cols', size)
-  document.documentElement.style.setProperty('--rows', size)
+  document.documentElement.style.setProperty('--cols', boardWidth)
+  document.documentElement.style.setProperty('--rows', boardHeight)
 
   game.init()
 }
