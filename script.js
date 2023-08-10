@@ -240,7 +240,6 @@ function initGame () {
   const apple = new Apple(snake, boardWidth, boardHeight)
   const game = new Game(board, snake, apple)
 
-  // Добавьте передачу размеров поля в CSS
   document.documentElement.style.setProperty('--cols', boardWidth)
   document.documentElement.style.setProperty('--rows', boardHeight)
 
