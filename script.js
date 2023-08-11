@@ -1,3 +1,8 @@
+const INITIAL_MOVE_DELAY = 500
+const MOVE_DELAY_DECREMENT = 20
+const MIN_BOARD_SIZE = 10
+const MAX_BOARD_SIZE = 100
+
 class Cell {
   constructor (x, y) {
     this.x = x
@@ -163,7 +168,7 @@ class Game {
   _startGame () {
     this._isGameOver = false
     this._lastMoveTime = 0
-    this._moveDelay = 500
+    this._moveDelay = INITIAL_MOVE_DELAY
     this._updateScore(0)
 
     requestAnimationFrame(this._gameLoop)
@@ -204,7 +209,7 @@ class Game {
       snake.move()
       this._updateScore(this._score + 1)
       this._apple.spawn(snake, this._board.width, this._board.height)
-      this._moveDelay -= 20
+      this._moveDelay -= MOVE_DELAY_DECREMENT
     } else {
       snake.move()
     }
@@ -227,11 +232,11 @@ class Game {
 }
 
 function initGame () {
-  const boardWidth = parseInt(prompt('Введите ширину поля (от 10 до 80):'))
-  const boardHeight = parseInt(prompt('Введите высоту поля (от 10 до 80):'))
+  const boardWidth = parseInt(prompt(`Введите ширину поля (от ${MIN_BOARD_SIZE} до ${MAX_BOARD_SIZE}):`))
+  const boardHeight = parseInt(prompt(`Введите высоту поля (от ${MIN_BOARD_SIZE} до ${MAX_BOARD_SIZE}):`))
 
-  if (isNaN(boardWidth) || boardWidth < 10 || boardWidth > 80 || isNaN(boardHeight) || boardHeight < 10 || boardHeight > 80) {
-    alert('Некорректный размер поля. Пожалуйста, введите число от 10 до 80.')
+  if (isNaN(boardWidth) || boardWidth < MIN_BOARD_SIZE || boardWidth > MAX_BOARD_SIZE || isNaN(boardHeight) || boardHeight < MIN_BOARD_SIZE || boardHeight > MAX_BOARD_SIZE) {
+    alert(`Некорректный размер поля. Пожалуйста, введите число от ${MIN_BOARD_SIZE} до ${MAX_BOARD_SIZE}.`)
     return
   }
 
