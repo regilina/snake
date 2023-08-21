@@ -198,19 +198,12 @@ class Game {
   _moveSnake (snake) {
     const head = snake.getNextHead()
 
-    if (head.x < 0 || head.x >= this._board.width || head.y < 0 || head.y >= this._board.height) {
+    if (this._isCollisionWithWall(head) || this._isCollisionWithSelf(head)) {
       this._gameOver()
       return
     }
 
-    for (let i = 1; i < snake.body.length; i++) {
-      if (head.x === snake.body[i].x && head.y === snake.body[i].y) {
-        this._gameOver()
-        return
-      }
-    }
-
-    if (head.x === this._apple.x && head.y === this._apple.y) {
+    if (this._isCollisionWithApple(head)) {
       snake.grow()
       snake.move()
       this._updateScore(this._score + 1)
@@ -220,9 +213,32 @@ class Game {
       snake.move()
     }
 
-    this._board.clearBoard()
-    this._board.renderSnake(snake)
-    this._board.renderApple(this._apple)
+    this._updateAndRenderBoard()
+  }
+
+  _isCollisionWithWall (position) {
+    return (
+      position.x < 0 ||
+      position.x >= this._board.width ||
+      position.y < 0 ||
+      position.y >= this._board.height
+    )
+  }
+
+  _isCollisionWithSelf (position) {
+    for (let i = 1; i < this._snake.body.length; i++) {
+      if (
+        position.x === this._snake.body[i].x &&
+        position.y === this._snake.body[i].y
+      ) {
+        return true
+      }
+    }
+    return false
+  }
+
+  _isCollisionWithApple (position) {
+    return position.x === this._apple.x && position.y === this._apple.y
   }
 
   _gameOver () {
