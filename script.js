@@ -127,21 +127,7 @@ class Game {
   }
 
   _addControls () {
-    const directionMap = {
-      ArrowUp: 'up',
-      ArrowDown: 'down',
-      ArrowLeft: 'left',
-      ArrowRight: 'right'
-    }
-
-    document.addEventListener('keydown', (event) => {
-      const key = event.key
-      const newDirection = directionMap[key]
-
-      if (newDirection && newDirection !== this._snake.direction) {
-        this._snake.direction = newDirection
-      }
-    })
+    document.addEventListener('keydown', this._handleKeyPress)
 
     const restartButton = document.getElementById('restart-button')
     restartButton.addEventListener('click', () => {
@@ -152,6 +138,22 @@ class Game {
     board.addEventListener('click', () => {
       this._startGame()
     })
+  }
+
+  _handleKeyPress = (event) => {
+    const directionMap = {
+      ArrowUp: 'up',
+      ArrowDown: 'down',
+      ArrowLeft: 'left',
+      ArrowRight: 'right'
+    }
+
+    const key = event.key
+    const newDirection = directionMap[key]
+
+    if (newDirection && newDirection !== this._snake.direction) {
+      this._snake.direction = newDirection
+    }
   }
 
   _updateScore (score) {
