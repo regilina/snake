@@ -127,16 +127,19 @@ class Game {
   }
 
   _addControls () {
+    const directionMap = {
+      ArrowUp: 'up',
+      ArrowDown: 'down',
+      ArrowLeft: 'left',
+      ArrowRight: 'right'
+    }
+
     document.addEventListener('keydown', (event) => {
       const key = event.key
-      if (key === 'ArrowUp' && this._snake.direction !== 'down') {
-        this._snake.direction = 'up'
-      } else if (key === 'ArrowDown' && this._snake.direction !== 'up') {
-        this._snake.direction = 'down'
-      } else if (key === 'ArrowLeft' && this._snake.direction !== 'right') {
-        this._snake.direction = 'left'
-      } else if (key === 'ArrowRight' && this._snake.direction !== 'left') {
-        this._snake.direction = 'right'
+      const newDirection = directionMap[key]
+
+      if (newDirection && newDirection !== this._snake.direction) {
+        this._snake.direction = newDirection
       }
     })
 
@@ -182,11 +185,14 @@ class Game {
       }
     }
 
+    this._updateAndRenderBoard()
+    requestAnimationFrame(this._gameLoop)
+  }
+
+  _updateAndRenderBoard = () => {
     this._board.clearBoard()
     this._board.renderSnake(this._snake)
     this._board.renderApple(this._apple)
-
-    requestAnimationFrame(this._gameLoop)
   }
 
   _moveSnake (snake) {
